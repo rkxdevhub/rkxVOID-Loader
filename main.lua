@@ -1,370 +1,321 @@
--- rkxVOID v4.1 Lite - GUI Preto com LED Azul (Versão Free)
--- by rkxdev_hub
+-- rkxVOID v4.1 Lite
 
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-local TweenService = game:GetService("TweenService")
+local a,b,c,d=game:GetService("Players"),game:GetService("UserInputService"),game:GetService("RunService"),game:GetService("TweenService")
+local e=a.LocalPlayer
+local f=e:GetMouse()
+local g=workspace.CurrentCamera
 
-local localPlayer = Players.LocalPlayer
-local mouse = localPlayer:GetMouse()
-local camera = workspace.CurrentCamera
-
-local character, humanoid, rootPart
-local function updateCharacter()
-	character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
-	humanoid = character:WaitForChild("Humanoid")
-	rootPart = character:WaitForChild("HumanoidRootPart")
+local h,i,j
+local function k()
+	h=e.Character or e.CharacterAdded:Wait()
+	i=h:WaitForChild("Humanoid")
+	j=h:WaitForChild("HumanoidRootPart")
 end
-updateCharacter()
-localPlayer.CharacterAdded:Connect(updateCharacter)
+k()
+e.CharacterAdded:Connect(k)
 
--- Proteção para não carregar o script mais de uma vez
-if getgenv().rkxVOIDv4Loaded then return end
-getgenv().rkxVOIDv4Loaded = true
+if getgenv().x then return end
+getgenv().x=true
 
--- Criar GUI
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "rkxVOID_v4"
-screenGui.ResetOnSpawn = false
-screenGui.IgnoreGuiInset = true
-screenGui.Parent = game:GetService("CoreGui")
+local l=Instance.new("ScreenGui")
+l.Name="rkxVOID_v4"
+l.ResetOnSpawn=false
+l.IgnoreGuiInset=true
+l.Parent=game:GetService("CoreGui")
 
-local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 440, 0, 380)
-mainFrame.Position = UDim2.new(0.5, -220, 0.5, -190)
-mainFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
-mainFrame.BorderSizePixel = 0
-mainFrame.Active = true
-mainFrame.Draggable = true
-mainFrame.Parent = screenGui
-mainFrame.ClipsDescendants = true
-local mainCorner = Instance.new("UICorner", mainFrame)
-mainCorner.CornerRadius = UDim.new(0, 16)
+local m=Instance.new("Frame",l)
+m.Size=UDim2.new(0,440,0,380)
+m.Position=UDim2.new(0.5,-220,0.5,-190)
+m.BackgroundColor3=Color3.fromRGB(10,10,10)
+m.BorderSizePixel=0
+m.Active=true
+m.Draggable=true
+local n=Instance.new("UICorner",m)
+n.CornerRadius=UDim.new(0,16)
 
--- Header
-local header = Instance.new("TextLabel", mainFrame)
-header.Size = UDim2.new(1, 0, 0, 40)
-header.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-header.BackgroundTransparency = 0.5
-header.Text = "rkxVOID v4.1 Lite - Preto LED Azul"
-header.Font = Enum.Font.GothamBold
-header.TextSize = 24
-header.TextColor3 = Color3.fromRGB(0, 170, 255)
-header.TextXAlignment = Enum.TextXAlignment.Left
-header.BorderSizePixel = 0
-local headerCorner = Instance.new("UICorner", header)
-headerCorner.CornerRadius = UDim.new(0, 16)
-header.Position = UDim2.new(0, 0, 0, 0)
+local o=Instance.new("TextLabel",m)
+o.Size=UDim2.new(1,0,0,40)
+o.BackgroundColor3=Color3.fromRGB(0,0,0)
+o.BackgroundTransparency=0.5
+o.Text="rkxVOID v4.1 Lite - Preto LED Azul"
+o.Font=Enum.Font.GothamBold
+o.TextSize=24
+o.TextColor3=Color3.fromRGB(0,170,255)
+o.TextXAlignment=Enum.TextXAlignment.Left
+o.BorderSizePixel=0
+local p=Instance.new("UICorner",o)
+p.CornerRadius=UDim.new(0,16)
+o.Position=UDim2.new(0,0,0,0)
 
--- Close / Minimize Button
-local closeBtn = Instance.new("TextButton", mainFrame)
-closeBtn.Size = UDim2.new(0, 40, 0, 40)
-closeBtn.Position = UDim2.new(1, -45, 0, 0)
-closeBtn.BackgroundColor3 = Color3.fromRGB(25, 0, 0)
-closeBtn.Text = "X"
-closeBtn.Font = Enum.Font.GothamBold
-closeBtn.TextSize = 28
-closeBtn.TextColor3 = Color3.fromRGB(255, 100, 100)
-closeBtn.BorderSizePixel = 0
-local closeCorner = Instance.new("UICorner", closeBtn)
-closeCorner.CornerRadius = UDim.new(0, 14)
+local q=Instance.new("TextButton",m)
+q.Size=UDim2.new(0,40,0,40)
+q.Position=UDim2.new(1,-45,0,0)
+q.BackgroundColor3=Color3.fromRGB(25,0,0)
+q.Text="X"
+q.Font=Enum.Font.GothamBold
+q.TextSize=28
+q.TextColor3=Color3.fromRGB(255,100,100)
+q.BorderSizePixel=0
+local r=Instance.new("UICorner",q)
+r.CornerRadius=UDim.new(0,14)
 
-local minimizedIcon = Instance.new("ImageButton", screenGui)
-minimizedIcon.Size = UDim2.new(0, 50, 0, 50)
-minimizedIcon.Position = UDim2.new(0, 10, 0.5, -25)
-minimizedIcon.BackgroundColor3 = Color3.fromRGB(10,10,10)
-minimizedIcon.Image = "rbxassetid://10578816197" -- caveira fofa (você pode trocar)
-minimizedIcon.Visible = false
-minimizedIcon.BorderSizePixel = 0
-local minimizedCorner = Instance.new("UICorner", minimizedIcon)
-minimizedCorner.CornerRadius = UDim.new(0, 16)
+local s=Instance.new("ImageButton",l)
+s.Size=UDim2.new(0,50,0,50)
+s.Position=UDim2.new(0,10,0.5,-25)
+s.BackgroundColor3=Color3.fromRGB(10,10,10)
+s.Image="rbxassetid://10578816197"
+s.Visible=false
+s.BorderSizePixel=0
+local t=Instance.new("UICorner",s)
+t.CornerRadius=UDim.new(0,16)
 
-closeBtn.MouseButton1Click:Connect(function()
-	mainFrame.Visible = false
-	minimizedIcon.Visible = true
+q.MouseButton1Click:Connect(function()
+	m.Visible=false
+	s.Visible=true
 end)
-minimizedIcon.MouseButton1Click:Connect(function()
-	mainFrame.Visible = true
-	minimizedIcon.Visible = false
+s.MouseButton1Click:Connect(function()
+	m.Visible=true
+	s.Visible=false
 end)
 
--- Tabs
-local tabsNames = {"Movimento", "Utilitários", "Troll"}
-local tabsFrames = {}
-local tabsButtons = {}
+local u={"Movimento","Utilitários","Troll"}
+local v,w={},{}
 
-local function createTabButton(name, posX)
-	local btn = Instance.new("TextButton", mainFrame)
-	btn.Size = UDim2.new(0, 130, 0, 40)
-	btn.Position = UDim2.new(0, posX, 0, 50)
-	btn.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-	btn.Text = name
-	btn.Font = Enum.Font.GothamBold
-	btn.TextSize = 18
-	btn.TextColor3 = Color3.fromRGB(180, 180, 180)
-	btn.BorderSizePixel = 0
-	local uic = Instance.new("UICorner", btn)
-	uic.CornerRadius = UDim.new(0, 12)
-	
-	btn.MouseEnter:Connect(function()
-		TweenService:Create(btn, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(0, 120, 220), TextColor3 = Color3.fromRGB(255,255,255)}):Play()
+local function x(y,z)
+	local A=Instance.new("TextButton",m)
+	A.Size=UDim2.new(0,130,0,40)
+	A.Position=UDim2.new(0,z,0,50)
+	A.BackgroundColor3=Color3.fromRGB(20,20,20)
+	A.Text=y
+	A.Font=Enum.Font.GothamBold
+	A.TextSize=18
+	A.TextColor3=Color3.fromRGB(180,180,180)
+	A.BorderSizePixel=0
+	local B=Instance.new("UICorner",A)
+	B.CornerRadius=UDim.new(0,12)
+	A.MouseEnter:Connect(function()
+		d:Create(A,TweenInfo.new(0.3),{BackgroundColor3=Color3.fromRGB(0,120,220),TextColor3=Color3.fromRGB(255,255,255)}):Play()
 	end)
-	btn.MouseLeave:Connect(function()
-		if tabsFrames[name].Visible == false then
-			TweenService:Create(btn, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(20,20,20), TextColor3 = Color3.fromRGB(180,180,180)}):Play()
+	A.MouseLeave:Connect(function()
+		if w[y].Visible==false then
+			d:Create(A,TweenInfo.new(0.3),{BackgroundColor3=Color3.fromRGB(20,20,20),TextColor3=Color3.fromRGB(180,180,180)}):Play()
 		end
 	end)
-	
-	return btn
+	return A
 end
 
-local function createTabFrame()
-	local frame = Instance.new("Frame", mainFrame)
-	frame.Size = UDim2.new(1, -20, 1, -110)
-	frame.Position = UDim2.new(0, 10, 0, 100)
-	frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-	frame.BorderSizePixel = 0
-	local corner = Instance.new("UICorner", frame)
-	corner.CornerRadius = UDim.new(0, 14)
-	frame.Visible = false
-	return frame
+local function C()
+	local D=Instance.new("Frame",m)
+	D.Size=UDim2.new(1,-20,1,-110)
+	D.Position=UDim2.new(0,10,0,100)
+	D.BackgroundColor3=Color3.fromRGB(15,15,15)
+	D.BorderSizePixel=0
+	local E=Instance.new("UICorner",D)
+	E.CornerRadius=UDim.new(0,14)
+	D.Visible=false
+	return D
 end
 
-local startX = 15
-for i, name in ipairs(tabsNames) do
-	tabsButtons[name] = createTabButton(name, startX + (i-1)*145)
-	tabsFrames[name] = createTabFrame()
-	if i == 1 then
-		tabsFrames[name].Visible = true
-		tabsButtons[name].BackgroundColor3 = Color3.fromRGB(0, 120, 220)
-		tabsButtons[name].TextColor3 = Color3.fromRGB(255, 255, 255)
+local F=15
+for G,H in ipairs(u)do
+	w[H]=C()
+	v[H]=x(H,F+(G-1)*145)
+	if G==1 then
+		w[H].Visible=true
+		v[H].BackgroundColor3=Color3.fromRGB(0,120,220)
+		v[H].TextColor3=Color3.fromRGB(255,255,255)
 	end
-	tabsButtons[name].MouseButton1Click:Connect(function()
-		for tn, tf in pairs(tabsFrames) do
-			tf.Visible = false
-			tabsButtons[tn].BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-			tabsButtons[tn].TextColor3 = Color3.fromRGB(180, 180, 180)
+	v[H].MouseButton1Click:Connect(function()
+		for I,J in pairs(w)do
+			J.Visible=false
+			v[I].BackgroundColor3=Color3.fromRGB(20,20,20)
+			v[I].TextColor3=Color3.fromRGB(180,180,180)
 		end
-		tabsFrames[name].Visible = true
-		tabsButtons[name].BackgroundColor3 = Color3.fromRGB(0, 120, 220)
-		tabsButtons[name].TextColor3 = Color3.fromRGB(255, 255, 255)
+		w[H].Visible=true
+		v[H].BackgroundColor3=Color3.fromRGB(0,120,220)
+		v[H].TextColor3=Color3.fromRGB(255,255,255)
 	end)
 end
 
--- Função para criar botões toggle com LED
-local function createToggleButton(parent, text, posY, callback)
-	local btn = Instance.new("TextButton", parent)
-	btn.Size = UDim2.new(0, 250, 0, 45)
-	btn.Position = UDim2.new(0, 20, 0, posY)
-	btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-	btn.Font = Enum.Font.GothamBold
-	btn.TextSize = 18
-	btn.Text = text .. " [OFF]"
-	btn.TextColor3 = Color3.fromRGB(180, 180, 180)
-	btn.BorderSizePixel = 0
-	local corner = Instance.new("UICorner", btn)
-	corner.CornerRadius = UDim.new(0, 16)
-	
-	local led = Instance.new("Frame", btn)
-	led.Size = UDim2.new(0, 20, 0, 20)
-	led.Position = UDim2.new(1, -30, 0.5, -10)
-	led.BackgroundColor3 = Color3.fromRGB(100, 0, 0)
-	led.BorderSizePixel = 0
-	led.AnchorPoint = Vector2.new(0.5, 0.5)
-	led.Name = "LED"
-	led.Visible = true
-	local ledCorner = Instance.new("UICorner", led)
-	ledCorner.CornerRadius = UDim.new(0, 10)
-
-	local enabled = false
-	
-	local function updateVisual()
-		if enabled then
-			btn.Text = text .. " [ON]"
-			btn.TextColor3 = Color3.fromRGB(0, 170, 255)
-			TweenService:Create(led, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut, -1, true), {BackgroundColor3 = Color3.fromRGB(0, 170, 255)}):Play()
+local function K(L,M,N)
+	local O=Instance.new("TextButton",L)
+	O.Size=UDim2.new(0,250,0,45)
+	O.Position=UDim2.new(0,20,0,M)
+	O.BackgroundColor3=Color3.fromRGB(30,30,30)
+	O.Font=Enum.Font.GothamBold
+	O.TextSize=18
+	O.Text=N.." [OFF]"
+	O.TextColor3=Color3.fromRGB(180,180,180)
+	O.BorderSizePixel=0
+	local P=Instance.new("UICorner",O)
+	P.CornerRadius=UDim.new(0,16)
+	local Q=Instance.new("Frame",O)
+	Q.Size=UDim2.new(0,20,0,20)
+	Q.Position=UDim2.new(1,-30,0.5,-10)
+	Q.BackgroundColor3=Color3.fromRGB(100,0,0)
+	Q.BorderSizePixel=0
+	Q.AnchorPoint=Vector2.new(0.5,0.5)
+	Q.Name="LED"
+	Q.Visible=true
+	local R=Instance.new("UICorner",Q)
+	R.CornerRadius=UDim.new(0,10)
+	local S=false
+	local function T()
+		if S then
+			O.Text=N.." [ON]"
+			O.TextColor3=Color3.fromRGB(0,170,255)
+			d:Create(Q,TweenInfo.new(0.6,Enum.EasingStyle.Quad,Enum.EasingDirection.InOut,-1,true),{BackgroundColor3=Color3.fromRGB(0,170,255)}):Play()
 		else
-			btn.Text = text .. " [OFF]"
-			btn.TextColor3 = Color3.fromRGB(180, 180, 180)
-			led.BackgroundColor3 = Color3.fromRGB(100, 0, 0)
-			led:ClearAllChildren() -- Para parar tween (limpa o UICorner e etc)
-			local ledCornerNew = Instance.new("UICorner", led)
-			ledCornerNew.CornerRadius = UDim.new(0, 10)
+			O.Text=N.." [OFF]"
+			O.TextColor3=Color3.fromRGB(180,180,180)
+			Q.BackgroundColor3=Color3.fromRGB(100,0,0)
+			Q:ClearAllChildren()
+			local U=Instance.new("UICorner",Q)
+			U.CornerRadius=UDim.new(0,10)
 		end
 	end
-	
-	btn.MouseButton1Click:Connect(function()
-		enabled = not enabled
-		updateVisual()
-		pcall(callback, enabled)
+	O.MouseButton1Click:Connect(function()
+		S=not S
+		T()
+		pcall(M,S)
 	end)
-	
-	updateVisual()
-	return btn, function() return enabled end
+	T()
+	return O,function()return S end
 end
 
--- Variáveis de estado
-local noclipEnabled = false
-local flyEnabled = false
-local stealthEnabled = false
-local runEnabled = false
-local jumpEnabled = false
+local V,W,X,Y,Z=false,false,false,false,false
+local aa,ab
 
-local flyBodyGyro, flyBodyVelocity
-
--- Funções principais
-
-local function getPartsNoCollide()
-	if not character then return {} end
-	local parts = {}
-	for _, part in pairs(character:GetDescendants()) do
-		if part:IsA("BasePart") then
-			table.insert(parts, part)
-		end
+local function ac()
+	if not h then return{}end
+	local ad={}
+	for _,ae in pairs(h:GetDescendants())do
+		if ae:IsA("BasePart")then table.insert(ad,ae)end
 	end
-	return parts
+	return ad
 end
 
-local function toggleNoclip(state)
-	noclipEnabled = state
-	if noclipEnabled then
-		RunService.Stepped:Connect(function()
-			if noclipEnabled and character then
-				for _, part in pairs(getPartsNoCollide()) do
-					part.CanCollide = false
+local function af(ag)
+	V=ag
+	if V then
+		c.Stepped:Connect(function()
+			if V and h then
+				for _,ah in pairs(ac())do
+					ah.CanCollide=false
 				end
 			end
 		end)
 	else
-		for _, part in pairs(getPartsNoCollide()) do
-			part.CanCollide = true
+		for _,ai in pairs(ac())do
+			ai.CanCollide=true
 		end
 	end
 end
 
-local function toggleFly(state)
-	flyEnabled = state
-	if flyEnabled then
-		if not rootPart then return end
-		flyBodyGyro = Instance.new("BodyGyro", rootPart)
-		flyBodyGyro.P = 90000
-		flyBodyGyro.MaxTorque = Vector3.new(900000, 900000, 900000)
-		flyBodyGyro.CFrame = rootPart.CFrame
+local function aj(ak)
+	W=ak
+	if W then
+		if not j then return end
+		aa=Instance.new("BodyGyro",j)
+		aa.P=90000
+		aa.MaxTorque=Vector3.new(900000,900000,900000)
+		aa.CFrame=j.CFrame
 
-		flyBodyVelocity = Instance.new("BodyVelocity", rootPart)
-		flyBodyVelocity.MaxForce = Vector3.new(900000, 900000, 900000)
-		flyBodyVelocity.Velocity = Vector3.new(0, 0, 0)
+		ab=Instance.new("BodyVelocity",j)
+		ab.MaxForce=Vector3.new(900000,900000,900000)
+		ab.Velocity=Vector3.new(0,0,0)
 
-		humanoid.PlatformStand = true
+		i.PlatformStand=true
 
 		spawn(function()
-			while flyEnabled do
-				RunService.Heartbeat:Wait()
-				local camCFrame = camera.CFrame
-				flyBodyGyro.CFrame = camCFrame
-				local direction = Vector3.new()
-
-				if UserInputService:IsKeyDown(Enum.KeyCode.W) then
-					direction = direction + camCFrame.LookVector
-				end
-				if UserInputService:IsKeyDown(Enum.KeyCode.S) then
-					direction = direction - camCFrame.LookVector
-				end
-				if UserInputService:IsKeyDown(Enum.KeyCode.A) then
-					direction = direction - camCFrame.RightVector
-				end
-				if UserInputService:IsKeyDown(Enum.KeyCode.D) then
-					direction = direction + camCFrame.RightVector
-				end
-				if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
-					direction = direction + Vector3.new(0, 1, 0)
-				end
-				if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
-					direction = direction - Vector3.new(0, 1, 0)
-				end
-				flyBodyVelocity.Velocity = direction.Unit * 70
-				if direction.Magnitude == 0 then
-					flyBodyVelocity.Velocity = Vector3.new(0,0,0)
-				end
+			while W do
+				c.Heartbeat:Wait()
+				local al=g.CFrame
+				aa.CFrame=al
+				local am=Vector3.new()
+				if b:IsKeyDown(Enum.KeyCode.W)then am=am+al.LookVector end
+				if b:IsKeyDown(Enum.KeyCode.S)then am=am-al.LookVector end
+				if b:IsKeyDown(Enum.KeyCode.A)then am=am-al.RightVector end
+				if b:IsKeyDown(Enum.KeyCode.D)then am=am+al.RightVector end
+				if b:IsKeyDown(Enum.KeyCode.Space)then am=am+Vector3.new(0,1,0) end
+				if b:IsKeyDown(Enum.KeyCode.LeftControl)then am=am-Vector3.new(0,1,0) end
+				ab.Velocity=am.Unit*70
+				if am.Magnitude==0 then ab.Velocity=Vector3.new(0,0,0)end
 			end
 		end)
 	else
-		if flyBodyGyro then flyBodyGyro:Destroy() flyBodyGyro = nil end
-		if flyBodyVelocity then flyBodyVelocity:Destroy() flyBodyVelocity = nil end
-		humanoid.PlatformStand = false
+		if aa then aa:Destroy()aa=nil end
+		if ab then ab:Destroy()ab=nil end
+		i.PlatformStand=false
 	end
 end
 
-local function toggleStealth(state)
-	stealthEnabled = state
-	if character then
-		for _, part in pairs(getPartsNoCollide()) do
-			part.Transparency = stealthEnabled and 1 or 0
+local function an(ao)
+	X=ao
+	if h then
+		for _,ap in pairs(ac())do
+			ap.Transparency=X and 1 or 0
 		end
-		local head = character:FindFirstChild("Head")
-		if head then
-			local nameTag = head:FindFirstChildWhichIsA("BillboardGui")
-			if nameTag then
-				nameTag.Enabled = not stealthEnabled
+		local aq=h:FindFirstChild("Head")
+		if aq then
+			local ar=aq:FindFirstChildWhichIsA("BillboardGui")
+			if ar then
+				ar.Enabled=not X
 			end
 		end
 	end
 end
 
-local function toggleRun(state)
-	runEnabled = state
-	if humanoid then
-		humanoid.WalkSpeed = runEnabled and 300 or 16 -- padrão 16
+local function as(at)
+	Y=at
+	if i then
+		i.WalkSpeed=Y and 100 or 16
 	end
 end
 
-local function toggleJump(state)
-	jumpEnabled = state
-	if humanoid then
-		humanoid.JumpPower = jumpEnabled and 100 or 50 -- padrão 50
+local function au(av)
+	Z=av
+	if i then
+		i.JumpPower=Z and 100 or 50
 	end
 end
 
--- Criar botões Movimento
-local posY = 20
-local btnNoclip, getNoclipState = createToggleButton(tabsFrames["Movimento"], "NoClip", posY, toggleNoclip)
-posY = posY + 55
-local btnFly, getFlyState = createToggleButton(tabsFrames["Movimento"], "Voo", posY, toggleFly)
-posY = posY + 55
-local btnRun, getRunState = createToggleButton(tabsFrames["Movimento"], "Correr", posY, toggleRun)
-posY = posY + 55
-local btnJump, getJumpState = createToggleButton(tabsFrames["Movimento"], "Super Pulo", posY, toggleJump)
-posY = posY + 55
+local posY=20
+local btnNoclip,getNoclipState=K(w["Movimento"],posY,af)
+posY=posY+55
+local btnFly,getFlyState=K(w["Movimento"],posY,aj)
+posY=posY+55
+local btnRun,getRunState=K(w["Movimento"],posY,as)
+posY=posY+55
+local btnJump,getJumpState=K(w["Movimento"],posY,au)
+posY=posY+55
 
--- Aba Utilitários: Texto "Disponível na versão VIP"
-local utilLabel = Instance.new("TextLabel", tabsFrames["Utilitários"])
-utilLabel.Size = UDim2.new(1, -40, 0, 60)
-utilLabel.Position = UDim2.new(0, 20, 0, 150)
-utilLabel.BackgroundTransparency = 1
-utilLabel.Text = "Disponível na versão VIP"
-utilLabel.Font = Enum.Font.GothamBold
-utilLabel.TextSize = 28
-utilLabel.TextColor3 = Color3.fromRGB(0, 170, 255)
-utilLabel.TextStrokeTransparency = 0.7
-utilLabel.TextStrokeColor3 = Color3.fromRGB(0, 100, 180)
-utilLabel.TextWrapped = true
-utilLabel.TextXAlignment = Enum.TextXAlignment.Center
-utilLabel.TextYAlignment = Enum.TextYAlignment.Center
+local av=Instance.new("TextLabel",w["Utilitários"])
+av.Size=UDim2.new(1,-40,0,60)
+av.Position=UDim2.new(0,20,0,150)
+av.BackgroundTransparency=1
+av.Text="Disponível na versão VIP"
+av.Font=Enum.Font.GothamBold
+av.TextSize=28
+av.TextColor3=Color3.fromRGB(0,170,255)
+av.TextStrokeTransparency=0.7
+av.TextStrokeColor3=Color3.fromRGB(0,100,180)
+av.TextWrapped=true
+av.TextXAlignment=Enum.TextXAlignment.Center
+av.TextYAlignment=Enum.TextYAlignment.Center
 
--- Aba Troll: Texto "Disponível na versão VIP"
-local trollLabel = Instance.new("TextLabel", tabsFrames["Troll"])
-trollLabel.Size = UDim2.new(1, -40, 0, 60)
-trollLabel.Position = UDim2.new(0, 20, 0, 150)
-trollLabel.BackgroundTransparency = 1
-trollLabel.Text = "Disponível na versão VIP"
-trollLabel.Font = Enum.Font.GothamBold
-trollLabel.TextSize = 28
-trollLabel.TextColor3 = Color3.fromRGB(0, 170, 255)
-trollLabel.TextStrokeTransparency = 0.7
-trollLabel.TextStrokeColor3 = Color3.fromRGB(0, 100, 180)
-trollLabel.TextWrapped = true
-trollLabel.TextXAlignment = Enum.TextXAlignment.Center
-trollLabel.TextYAlignment = Enum.TextYAlignment.Center
+local aw=Instance.new("TextLabel",w["Troll"])
+aw.Size=UDim2.new(1,-40,0,60)
+aw.Position=UDim2.new(0,20,0,150)
+aw.BackgroundTransparency=1
+aw.Text="Disponível na versão VIP"
+aw.Font=Enum.Font.GothamBold
+aw.TextSize=28
+aw.TextColor3=Color3.fromRGB(0,170,255)
+aw.TextStrokeTransparency=0.7
+aw.TextStrokeColor3=Color3.fromRGB(0,100,180)
+aw.TextWrapped=true
+aw.TextXAlignment=Enum.TextXAlignment.Center
+aw.TextYAlignment=Enum.TextYAlignment.Center
 
 print("rkxVOID v4.1 Lite carregado !")
